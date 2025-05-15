@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/png" href="/static/images/icon.png" />
+    <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>SugarGuard</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <img src="/static/images/icon.png" />
+        <h1>SugarGuard</h1>
+      </div>
+
+      <h4>
+        SugarGuard is a web application that uses machine learning to predict
+        the likelihood of diabetes based on key health metrics.
+      </h4>
+      <form action="/" method="post">
+        <label for="Gender">Gender:</label>
+        <select name="Gender" required>
+          <option value="0">Female</option>
+          <option value="1">Male</option>
+          <option value="2">Other</option>
+        </select>
+        <label for="Heart Disease">Heart Disease:</label>
+        <select name="Heart Disease" required>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+
+        <label for="Hypertension">Hypertension:</label>
+        <select name="Hypertension" required>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+
+        <label for="smoking_history">smoking_history:</label>
+        <select name="smoking_history" required>
+          <option value="0">No Info</option>
+          <option value="1">never</option>
+          <option value="2">former</option>
+          <option value="3">current</option>
+          <option value="4">not current</option>
+          <option value="5">ever</option>
+        </select>
+
+        <label for="Age"> Age:</label>
+        <input type="number" name="Age" required />
+
+        <label for="BMI">BMI:</label>
+        <input type="number" name="BMI" required />
+
+        <label for="HbA1c_level">HbA1c level:</label>
+        <input type="number" name="HbA1c_level" required />
+
+        <label for="blood_glucose_level">blood glucose level:</label>
+        <input type="number" name="blood_glucose_level" required />
+
+        <button type="submit">Predict</button>
+      </form>
+      <br /><br />
+      <div
+        class="{% if prediction == 1 %}diabetes{% elif prediction == 0 %}no-diabetes{% endif %}"
+      >
+        <h2>Prediction Result:</h2>
+        {% if prediction is not none %}
+        <p
+          class="result {% if prediction == 1 %}danger{% else %}safe{% endif %}"
+        >
+          {{ "Diabetes Detected" if prediction == 1 else "No Diabetes Detected"
+          }}
+        </p>
+        {% endif %}
+      </div>
+      <h3>Prediction History</h3>
+      <canvas id="predictionChart" width="400" height="200"></canvas>
+
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Prediction</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <script>
+  // Get today's date
+  function getTodayDate() {
+    const today = new Date();
+    return today.toLocaleDateString("en-GB"); // Format: DD/MM/YYYY
+  }
+
+  // Store prediction to localStorage
+  function storePrediction(result) {
+    const history = JSON.parse(localStorage.getItem("diabetesHistory") || "[]");
+    history.push({ date: getTodayDate(), result });
+    localStorage.setItem("diabetesHistory", JSON.stringify(history));
+  }
+
+  // Load history and update chart + table
+  function loadHistory() {
+    const history = JSON.parse(localStorage.getItem("diabetesHistory") || "[]");
+
+    const dates = history.map(entry => entry.date);
+    const values = history.map(entry => entry.result === 1 ? 1 : 0);
+
+    // Update table
+    const tableBody = document.querySelector("#historyTable tbody");
+    tableBody.innerHTML = "";
+    history.forEach(entry => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${entry.date}</td><td>${entry.result == 1 ? 'Diabetes' : 'No Diabetes'}</td>`;
+      tableBody.appendChild(row);
+    });
+
+    // Render Chart
+    new Chart(document.getElementById('predictionChart'), {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [{
+          label: 'Prediction (1 = Diabetes)',
+          data: values,
+          borderColor: 'red',
+          fill: false,
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return value == 1 ? "Diabetes" : "No Diabetes";
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Run after page loads
+  window.onload = loadHistory;
+
+  // On form submit (insert in your POST handling JS or Flask template)
+  {% if prediction is not none %}
+    storePrediction({{ prediction }});
+  {% endif %}
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,147 @@
+body {
+    font-family: "Arial", sans-serif;
+    background-image: url("/static/images/bg2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #cccccc00;
+    border-radius: 8px;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 0 8px -2px rgb(0, 0, 0);
+    text-align: center;  
+}
+
+.row {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.row img {
+    margin-right: 10px;  
+    width: 30px;
+    height: 30px;  
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-top: 20px;
+}
+
+label {
+    margin-top: 10px;
+    color: #000000;
+    font-size: larger;
+    color: #e96eff;
+    text-shadow: 0 0;
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+select, input {
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 8px;
+    border: solid #4d005b 2px;
+    width: 100%;
+}
+
+input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    outline: none;
+    border-radius: 0px;
+}
+
+input:focus {
+    border-color: #3776ff;
+}
+
+button {
+    padding: 6px;
+    background-color: #e4e7f400;
+    color: #e96eff;
+    font-size: xx-large;
+    border: solid #e96eff 3px;
+    border-radius: 0px;
+    cursor: pointer;
+    transition: 0.5s;
+    width: 100%; 
+}
+
+button:hover {
+    background-color: #e96eff;
+    color: #fff;
+    box-shadow: 0 0 8px -4px rgb(0, 0, 0);
+}
+
+h2 {
+    margin-top: 20px;
+    color: #000000;
+}
+
+.result {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+div.diabetes {
+    background-color: #ffdddd;
+    padding: 10px;
+    border: 2px solid red;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);  
+}
+
+div.no-diabetes {
+    background-color: #ddffdd;
+    padding: 10px;
+    border: 2px solid green;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.result.danger {
+    color: rgb(255, 0, 0);
+}
+
+.result.safe {
+    color: green;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 10px;
+    }
+
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        font-size: large;
+    }
+
+    label, select, input {
+        width: 90%; 
+    }
+}
